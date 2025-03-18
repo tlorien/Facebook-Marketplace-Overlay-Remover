@@ -1,4 +1,4 @@
-#Facebook Marketplace Overlay Remover
+# Facebook Marketplace Overlay Remover
 
 This userscript is designed to allow access to Facebook Marketplace listings **without a Facebook account**. It does this by taking a heuristic approach to removing overlays and elements that block interaction with the page. The approach used should dynamically identify and eliminate intrusive elements without requiring updates whenever Facebook makes changes to its site.
 
@@ -10,6 +10,49 @@ This userscript is hosted on [Greasy Fork](https://greasyfork.org/en/scripts/530
 3. Click on the "Install" button on the Greasy Fork page.
 
 Once installed, the script will automatically run whenever you visit Facebook Marketplace. It operates in the background, removing any overlays that fit the heuristic criteria without any interaction needed from the user.
+
+## The Script
+
+```javascript
+(function() {
+    'use strict';
+ 
+    function isLikelyOverlay(element) {
+        const rect = element.getBoundingClientRect();
+        const viewportArea = window.innerWidth * window.innerHeight;
+        const elementArea = rect.width * rect.height;
+        const coversMostOfTheViewport = elementArea > viewportArea * 0.5; // covers more than 50% of the viewport
+        const isFixedOrAbsolute = ['fixed', 'absolute'].includes(getComputedStyle(element).position);
+        const hasHighZIndex = parseInt(getComputedStyle(element).zIndex, 10) > 100;
+ 
+        return coversMostOfTheViewport && isFixedOrAbsolute && hasHighZIndex;
+    }
+ 
+    function removeSuspectedOverlays() {
+        document.querySelectorAll('body *').forEach(element => {
+            if (isLikelyOverlay(element)) {
+                element.remove();
+            }
+        });
+    }
+ 
+    removeSuspectedOverlays();
+ 
+    const observer = new MutationObserver(mutations => {
+        mutations.forEach(mutation => {
+            if (mutation.addedNodes.length) {
+                removeSuspectedOverlays();
+            }
+        });
+    });
+ 
+    observer.observe(document.body, {
+        childList: true,
+        subtree: true
+    });
+ 
+})();
+```
 
 ## How It Works
 The script examines each element in the document body to determine if it behaves like an overlay based on several criteria:

@@ -1,6 +1,8 @@
 # Facebook Marketplace Overlay Remover
 
-This userscript is designed to allow access to Facebook Marketplace listings **without a Facebook account**. It does this by taking a heuristic approach to removing overlays and elements that block interaction with the page. The approach used should dynamically identify and eliminate intrusive elements without requiring updates whenever Facebook makes changes to its site.
+This userscript is designed to allow access to Facebook Marketplace listings **without a Facebook account**. It does this by taking a heuristic approach to removing overlays and elements that block interaction with the page.
+
+This approach should dynamically identify and eliminate intrusive elements without requiring updates whenever Facebook makes changes to its site.
 
 ## Installation
 This userscript is hosted on [Greasy Fork](https://greasyfork.org/en/scripts/530181-facebook-marketplace-overlay-remover) and other popular userscript repositories. To install:
